@@ -8,7 +8,7 @@
 #define TECLA_SELECT 4
 #define BOTON_A2 5
 
-void teclado_init(int *vKey);
+void teclado_init(int *vKey); //MODIFICACION PARA RECONOCER TECLA CON GALILEO
 
 void teclado_loop();
 
