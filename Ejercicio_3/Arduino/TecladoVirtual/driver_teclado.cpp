@@ -12,7 +12,7 @@ void (*keydown_handler[6])(void);
 int count = 0;
 volatile int boton = 0;
 int *virtualKey;
-adc_cfg cfg;
+miestruct cfg;
 
 void key_down_callback(void (*handler)(), int tecla)
 {
@@ -39,7 +39,7 @@ int get_key(int input)
 
 void Callback()
 {
-  key = get_key(cfg.analogVal);
+  key = get_key(cfg.analogValue);
   count = (count + 1) % 2;
   delay(50);
   if(count)
@@ -66,10 +66,13 @@ void Callback()
 void teclado_init(int *vKey)
 {
   virtualKey = vKey;
+  
+  cli(); //DESHABILITO LAS INTERRUPCIONES EN LA CONFIGURACION DEL PINCHANGE INTERRUPT
   DDRC &= ~(1 << DDC2);      // PC2 (PCINT10 pin) is now an input
   PCICR |= (1 << PCIE1);     // set PCIE1 to enable PCMSK1 scan
   PCMSK1 |= (1 << PCINT10);   // set PCINT10 to trigger an interrupt on state change
-
+  sei();
+  //-----------------------
   cfg.canal = 0;
   cfg.callback = Callback;
   adc_init(&cfg);
@@ -94,5 +97,6 @@ ISR (PCINT1_vect)
 {
   boton = 1;
 }
+
 
 
