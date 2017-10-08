@@ -23,7 +23,7 @@ char received[32];
 char reply[32];
 volatile int count = 0;
 volatile int timer = 1;
-
+ 
 void setup()
 {
   cli();          // disable global interrupts
