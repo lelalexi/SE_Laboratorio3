@@ -39,7 +39,7 @@ int get_key(int input)
 
 void Callback()
 {
-  key = get_key(cfg.aVal);
+  key = get_key(cfg.analogVal);
   count = (count + 1) % 2;
   delay(50);
   if(count)
@@ -70,7 +70,7 @@ void teclado_init(int *vKey)
   PCICR |= (1 << PCIE1);     // set PCIE1 to enable PCMSK1 scan
   PCMSK1 |= (1 << PCINT10);   // set PCINT10 to trigger an interrupt on state change
 
-  cfg.channel = 0;
+  cfg.canal = 0;
   cfg.callback = Callback;
   adc_init(&cfg);
   
@@ -94,6 +94,5 @@ ISR (PCINT1_vect)
 {
   boton = 1;
 }
-
 
 
