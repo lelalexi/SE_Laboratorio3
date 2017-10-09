@@ -109,11 +109,13 @@ void loop()
   if(timer){
     if(!ini_ADC){
       adc_init(&cfg_ADC);
+      delay(2);
       ini_ADC=1;}
     adc_loop();
   }else{
     if(ini_ADC){
       teclado_init(&vKey);
+      delay(2);
       ini_ADC=0;}
     teclado_loop();
   }
@@ -419,4 +421,3 @@ ISR(TIMER2_COMPA_vect)
     cuenta = 0;
   }
 }
-
