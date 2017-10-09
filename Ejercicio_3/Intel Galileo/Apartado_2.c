@@ -9,10 +9,9 @@ int buscarComando(char *cmd, const char **list)
 	int i;
 	for(i = 0; i < numComandos; i++)
 		if(strcmp(cmd, list[i]) == 0) //COMPARO SI ALGUNOS DE LOS COMANDOS DEFINIDOS COINCIDE CON EL LEIDO POR CONSOLA
-			return 1; //TRUE
-	return 0; //FALSE
+			return i; //ES VALIDO
+	return -1; //NO ES VALIDO
 }
-
 int main()
 {
 	mraa::Gpio* d_pin = NULL;
@@ -21,22 +20,24 @@ int main()
     i2c = new mraa::I2c(0);
     i2c->address(8);
 
-	const char *comandos[numComandos] = {"right", "up", "down", "left", "select", "boton"};
-	int valid = 0;
+
+	const char *comandos[numComandos] = {"TECLA_RIGHT", "TECLA_UP", "TECLA_DOWN", "TECLA_LEFT", "TECLA_SELECT", "BOTON_A2"};
+	int valid = -1;
 	string line;
 	char request[8];
 	for(;;)
 	{
 		d_pin->write(0);
 		printf("Ingrese una tecla: ");
-		while(!valid)
+		while((valid==-1))
 		{
 			getline(cin, line); //PARA LEER DE CONSOLA
 			valid = buscarComando((char*)line.c_str(), comandos);
 		}
 		sleep(1);
-		valid = 0;
-		sprintf(request, "(%s)", line.c_str());
+
+		sprintf(request, "(%i$%i$)", valid,6);
+		valid = -1;
 		i2c->write((uint8_t*)request, strlen(request));
 		d_pin->write(1);
 
